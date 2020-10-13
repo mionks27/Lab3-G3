@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/help_button"
-        android:icon="@drawable/ic_action_ayuda"
+        android:icon="@android:drawable/ic_menu_help"
         android:onClick="buttonHelp"
         android:title="Ayuda"
         app:showAsAction="ifRoom" />
