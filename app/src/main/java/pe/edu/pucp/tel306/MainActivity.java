@@ -23,6 +23,9 @@ import android.view.MenuItem;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
     boolean descanso1 = false;
     int pausa =0;
@@ -139,8 +142,18 @@ public class MainActivity extends AppCompatActivity {
                     TextView min = findViewById(R.id.TextMotivacional);
                     min.setText(valor);
                     if(i==5){
-                        i = 0;
+                        ArrayList<String> arregloDeFrases = new ArrayList<String>();
+                        arregloDeFrases.add("Los elefantes es el único animal que no pueden saltar");
+                        arregloDeFrases.add("Los camellos cuentan con tres párpados para protegerse de las tormentas de arena");
+                        arregloDeFrases.add("El ojo de un avestruz es más grande que su cerebro");
+                        arregloDeFrases.add("El tamaño de cerebro de un cocodrilo es igual al del dedo pulgar de una persona");
+                        arregloDeFrases.add("Las mariposas tiene el sentido del gusto en sus patas");
+                        arregloDeFrases.add("La lengua de una ballena azul pesa como un elegante adulto");
+                        Random r = new Random();
+                        int valorDado = r.nextInt(5);
 
+                        abrirDialog2(arregloDeFrases.get(valorDado));
+                        i = 0;
                     }
                 }
                   }
@@ -226,4 +239,18 @@ public class MainActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+
+    public void abrirDialog2(String mensaje) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Dato Curioso");
+        dialog.setMessage(mensaje);
+        dialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.show();
+    }
+
 }
