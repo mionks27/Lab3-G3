@@ -13,6 +13,7 @@ import android.util.Pair;
 import android.view.ContextMenu;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import pe.edu.pucp.tel306.Threads.ControladorModelView;
@@ -29,12 +30,20 @@ public class MainActivity extends AppCompatActivity {
     ImageButton start;
     boolean descanso = false;
     ControladorModelView contadorViewModel;
+    int i= 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         setTitle("Página Principal");
+        TextView min = findViewById(R.id.TextMotivacional);
+        min.setVisibility(View.GONE);
+
+
+        ImageView nim = findViewById(R.id.imageView);
+        nim.setVisibility(View.GONE);
+
         TextView textView = findViewById(R.id.textViewContadorMinutos);
         registerForContextMenu(textView);
 
@@ -42,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(pausa>0){
+                    TextView min = findViewById(R.id.TextMotivacional);
+                    min.setVisibility(View.VISIBLE);
+                    ImageView nim = findViewById(R.id.imageView);
+                    nim.setVisibility(View.VISIBLE);
+                }
                 if(pausa % 2 == 0){
                     start.setImageResource(R.drawable.ic_action_play);
                 }else{
@@ -91,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (booleanIntegerPair.first){
                     int valor = booleanIntegerPair.second;
-                    min = String.valueOf(valor);
+                    String minu = String.valueOf(valor);
                     TextView min = findViewById(R.id.textViewContadorMinutos);
                     if(valor > 10){
                         min.setText(String.valueOf(valor)+" :");
@@ -110,6 +125,33 @@ public class MainActivity extends AppCompatActivity {
                     contadorViewModel.contadorDescanso();
                 }
 
+            }
+        });
+
+        contadorViewModel.getNotificacionFin().observe(this, new Observer<Pair<Boolean, String>>() {
+            public void onChanged(Pair<Boolean, String> booleanIntegerPair) {
+
+                if (booleanIntegerPair.first){
+                    i++;
+                    String valor = booleanIntegerPair.second;
+                    TextView min = findViewById(R.id.TextMotivacional);
+                    min.setText(valor);
+                    if(i==5){
+                        i = 0;
+
+                    }
+                }
+                  }
+        });
+
+        contadorViewModel.getNotificacionCiclo().observe(this, new Observer<Pair<Boolean, String>>() {
+            public void onChanged(Pair<Boolean, String> booleanIntegerPair) {
+
+                if (booleanIntegerPair.first){
+                    String valor = booleanIntegerPair.second;
+                    TextView min = findViewById(R.id.textViewCiclos);
+                    min.setText(valor);
+                }
             }
         });
 
