@@ -37,17 +37,17 @@ public class MainActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pausa++;
+                /*pausa++;
                 if(pausa % 2 == 0){
                     pausar = true;
                     ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
                     imageButton.setImageResource(R.drawable.ic_action_play);
-                }else{
+                }else{*/
                     pausar = false;
-                    ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
-                    imageButton.setImageResource(R.drawable.ic_action_pause);
+                    /*ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
+                    imageButton.setImageResource(R.drawable.ic_action_pause);*/
                 }
-            }
+            //}
         });
 
         ImageButton refresh = findViewById(R.id.imageButtonRefresh);
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
-
+        cronometro.start();
         TextView textView = findViewById(R.id.textViewContadorMinutos);
         registerForContextMenu(textView);
 
