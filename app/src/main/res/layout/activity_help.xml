@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HelpActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textViewTitleHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:text="¿Qué es Pomodoro?"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewSubT1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Temporizador Pomodoro en línea"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewText1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="TomatoTimers es un temporizador pomodoro en bucle personalizable y fácil de usar para aumentar su eficiencia."
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textViewSubT2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Acerca de la Técnica Pomodoro"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="La Técnica Pomodoro es un método de gestión del tiempo desarrollado por Francesco Cirillo a finales de los 80. Esta técnica utiliza un temporizador para dividir las obras en un conjunto de intervalos separados por descansos. La técnica Pomodoro aumenta la productividad tomando descansos cortos programados con regularidad."
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textViewSubT3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cómo utilizar Pomodoro / TomatoTimers"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewText3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text='Decida la tarea a realizar, establezca los temporizadores en 25 minutos para un "Pomodoro". Trabaja en la tarea hasta que se complete el temporizador. Después de completar el temporizador, coloque una marca de verificación en la lista de tareas pendientes. Tómate un breve descanso de 5 minutos. Después de cuatro "Pomodoro", tómate un descanso. Repita el paso 1.'
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
