@@ -16,8 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
-
-    boolean pausar = false;
+    int pausa =0;
+    boolean pausar = true;
     Thread cronometro;
     int contadorLocalMinutos = 24;
     int contadorLocalSegundos = 59;
@@ -27,6 +27,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Página Principal");
+
+        ImageButton start = findViewById(R.id.imageButtonPlayPause);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pausa++;
+                if(pausa % 2 == 0){
+                    pausar = true;
+                    ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
+                    imageButton.setImageResource(R.drawable.ic_action_play);
+                }else{
+                    pausar = false;
+                    ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
+                    imageButton.setImageResource(R.drawable.ic_action_pause);
+                }
+            }
+        });
+
+        ImageButton refresh = findViewById(R.id.imageButtonRefresh);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pausar= true;
+                contadorLocalMinutos = 24;
+                contadorLocalSegundos = 59;
+            }
+        });
 
         cronometro = new Thread(new Runnable() {
             @Override
@@ -90,21 +117,10 @@ public class MainActivity extends AppCompatActivity {
         int pausa = 0;
         switch (view.getId()){
             case R.id.imageButtonPlayPause:
-                pausa++;
-                if(pausa % 2 == 0){
-                    pausar = true;
-                    ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
-                    imageButton.setImageResource(R.drawable.ic_action_play);
-                }else{
-                    pausar = false;
-                    ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
-                    imageButton.setImageResource(R.drawable.ic_action_pause);
-                }
+
                 break;
             case R.id.imageButtonRefresh:
-                pausar= true;
-                 contadorLocalMinutos = 24;
-                 contadorLocalSegundos = 59;
+
                 break;
         }
     }
