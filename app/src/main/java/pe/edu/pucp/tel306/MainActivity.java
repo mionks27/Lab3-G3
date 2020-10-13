@@ -22,20 +22,19 @@ import android.view.MenuItem;
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
-
+    boolean descanso1 = false;
     int pausa =0;
     String min = "";
     String seg = "";
     ImageButton start;
     boolean descanso = false;
+    ControladorModelView contadorViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         setTitle("Página Principal");
-
-
         TextView textView = findViewById(R.id.textViewContadorMinutos);
         registerForContextMenu(textView);
 
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         ViewModelProvider viewModelProvider = new ViewModelProvider(this);
-        final ControladorModelView contadorViewModel = viewModelProvider.get(ControladorModelView.class);
+        contadorViewModel = viewModelProvider.get(ControladorModelView.class);
         contadorViewModel.getContadorSegundos().observe(this, new Observer<Pair<Boolean, Integer>>() {
             @Override
             public void onChanged(Pair<Boolean, Integer> booleanIntegerPair) {
@@ -75,9 +74,13 @@ public class MainActivity extends AppCompatActivity {
                    }else{
                        segundos.setText("0"+String.valueOf(valor));
                    }
-                }else{
-                    descanso = true;
+
+                    if(valor == 0){
+                        descanso = true;
+                    }
                 }
+
+
 
             }
         });
@@ -95,6 +98,16 @@ public class MainActivity extends AppCompatActivity {
                     }else{
                         min.setText("0"+String.valueOf(valor)+" :");
                     }
+
+                    if(valor == 0){
+                        descanso1 = true;
+                    }
+
+                }
+
+
+                if(descanso == true && descanso1 == true){
+                    contadorViewModel.contadorDescanso();
                 }
 
             }
