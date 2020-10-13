@@ -1,80 +1,158 @@
 package pe.edu.pucp.tel306.Threads;
 
+import android.util.Log;
+import android.util.Pair;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 
 public class ControladorModelView extends ViewModel {
-
-    private MutableLiveData<Integer> contadorSegundos = new MutableLiveData<>();
-    private MutableLiveData<Integer> contadorMinutos = new MutableLiveData<>();
+    private MutableLiveData<Pair<Boolean,Integer>> contadorSegundos = new MutableLiveData<>(new Pair<Boolean, Integer>(true,59));
+    private MutableLiveData<Pair<Boolean,Integer>> contadorMinutos = new MutableLiveData<>(new Pair<Boolean, Integer>(true,24));
 
     private Thread thread = null;
 
 
-    public void iniciarciclo (final boolean pause){
-        setThread(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int contadorLocalMinutos = 24;
-                int contadorLocalSegundos = 59;
-                while (contadorLocalMinutos > 0){
-                   if (pause == false){
-                       contadorMinutos.postValue(contadorLocalMinutos);
-                       while (contadorLocalSegundos >= 0){
-                           contadorSegundos.postValue(contadorLocalSegundos);
-                           contadorLocalSegundos = contadorLocalSegundos -1;
-                           try {
-                               Thread.sleep(1000);
-                           } catch (InterruptedException e) {
-                               e.printStackTrace();
-                               break;
-                           }
-                           if(contadorLocalSegundos == 0){
-                               contadorLocalSegundos = 59;
-                               break;
-                           }
-                       }
 
-                       contadorLocalMinutos = contadorLocalMinutos -1;
-                       try {
-                           Thread.sleep(1000);
-                       } catch (InterruptedException e) {
-                           e.printStackTrace();
-                           break;
-                       }
 
-                       if(contadorLocalMinutos == 0){
-                           contadorLocalMinutos = 24;
-                           break;
-                       }
-                   }
+    public  void iniciarContador(){
+
+        if (getThread() == null) {
+
+            setThread(new Thread(new Runnable() {
+                @Override
+                public void run() {
+                            Pair<Boolean,Integer> valorSegundos = getContadorSegundos().getValue();
+                            int contadorLocalSegunfos = valorSegundos.second;
+
+                            Pair<Boolean,Integer> valorMin= getContadorMinutos().getValue();
+                            int contadorLocalMin= valorMin.second;
+
+                            for (; contadorLocalMin <= 0; contadorLocalMin--) {
+                                Log.d("contadorApp", String.valueOf(contadorLocalMin));
+
+                                getContadorMinutos().postValue(new Pair<Boolean, Integer>(true,contadorLocalMin));
+
+                                for(;contadorLocalSegunfos <= 0; contadorLocalSegunfos--){
+                                    getContadorSegundos().postValue(new Pair<Boolean, Integer>(true,contadorLocalSegunfos));
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                        break;
+                                    }
+
+                                    if(contadorLocalSegunfos == -1){
+                                        getContadorMinutos().postValue(new Pair<Boolean, Integer>(false,59));
+                                        break;
+                                    }
+
+                                }
+
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                    break;
+                                }
+                            }
+                            setThread(null);
+                            if(contadorLocalMin == -1 ) {
+                                getContadorMinutos().postValue(new Pair<Boolean, Integer>(false,4));
+                            }
+
 
                 }
+            }));
 
-            }
-        }));
+            getThread().start();
+        }
 
-        getThread().start();
-    }
-
-    public  void iniciarDescanso(){
 
     }
 
-    public MutableLiveData<Integer> getContadorSegundos() {
+    public void contadorDescanso(){
+        if (getThread() == null) {
+
+            setThread(new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Pair<Boolean,Integer> valorSegundos = getContadorSegundos().getValue();
+                    int contadorLocalSegunfos = valorSegundos.second;
+
+                    Pair<Boolean,Integer> valorMin= getContadorMinutos().getValue();
+                    int contadorLocalMin= valorMin.second;
+
+                    for (; contadorLocalMin <= 0; contadorLocalMin--) {
+                        Log.d("contadorApp", String.valueOf(contadorLocalMin));
+
+                        getContadorMinutos().postValue(new Pair<Boolean, Integer>(true,contadorLocalMin));
+
+                        for(;contadorLocalSegunfos <= 0; contadorLocalSegunfos--){
+                            getContadorSegundos().postValue(new Pair<Boolean, Integer>(true,contadorLocalSegunfos));
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                                break;
+                            }
+
+                            if(contadorLocalSegunfos == -1){
+                                getContadorMinutos().postValue(new Pair<Boolean, Integer>(false,59));
+                                break;
+                            }
+
+                        }
+
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            break;
+                        }
+                    }
+                    setThread(null);
+                    if(contadorLocalMin == -1 ) {
+                        getContadorMinutos().postValue(new Pair<Boolean, Integer>(false,4));
+                    }
+
+
+                }
+            }));
+
+            getThread().start();
+        }
+
+    }
+
+    public void refreshContador(){
+        if(getThread() != null){
+            getThread().interrupt();
+            getContadorMinutos().postValue(new Pair<Boolean, Integer>(true,24));
+            getContadorSegundos().postValue(new Pair<Boolean, Integer>(true,59));
+        }
+    }
+
+    public void pauseContador(){
+        if(getThread() != null){
+            getThread().interrupt();
+        }
+    }
+
+    public MutableLiveData<Pair<Boolean, Integer>> getContadorSegundos() {
         return contadorSegundos;
     }
 
-    public void setContadorSegundos(MutableLiveData<Integer> contadorSegundos) {
+    public void setContadorSegundos(MutableLiveData<Pair<Boolean, Integer>> contadorSegundos) {
         this.contadorSegundos = contadorSegundos;
     }
 
-    public MutableLiveData<Integer> getContadorMinutos() {
+    public MutableLiveData<Pair<Boolean, Integer>> getContadorMinutos() {
         return contadorMinutos;
     }
 
-    public void setContadorMinutos(MutableLiveData<Integer> contadorMinutos) {
+    public void setContadorMinutos(MutableLiveData<Pair<Boolean, Integer>> contadorMinutos) {
         this.contadorMinutos = contadorMinutos;
     }
 

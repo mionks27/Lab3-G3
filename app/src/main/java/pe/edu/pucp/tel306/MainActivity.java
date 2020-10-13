@@ -1,6 +1,7 @@
 package pe.edu.pucp.tel306;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -8,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Pair;
 import android.view.ContextMenu;
 import android.view.View;
 import android.widget.ImageButton;
@@ -22,13 +24,10 @@ import org.w3c.dom.Text;
 public class MainActivity extends AppCompatActivity {
 
     int pausa =0;
-    boolean corre = false;
-    Thread cronometro;
-    int contadorLocalMinutos = 24;
-    int contadorLocalSegundos = 59;
-    TextView cronometroText;
-    Handler h = new Handler();
-    ImageButton startPause , refresh;
+    String min = "";
+    String seg = "";
+    ImageButton start;
+    boolean descanso = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,101 +36,92 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Página Principal");
 
 
-        cronometro = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                while (true){
-                    if (corre == true){
-
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                        contadorLocalSegundos= contadorLocalSegundos -1;
-
-                        if(contadorLocalSegundos == 0){
-                            contadorLocalMinutos = contadorLocalMinutos -1;
-                            contadorLocalSegundos = 59;
-                        }
-
-                        if (contadorLocalMinutos == 0){
-                            contadorLocalMinutos = 24;
-                        }
-                        h.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                    String segundos = "";
-                                    String minutos = "";
-
-                                if(contadorLocalSegundos >= 10){
-                                    segundos = String.valueOf(contadorLocalSegundos);
-                                }else{
-                                    segundos = "0"+String.valueOf(contadorLocalSegundos);
-                                }
-                                if(contadorLocalMinutos>= 10){
-                                    minutos = String.valueOf(contadorLocalMinutos);
-                                }else {
-                                    minutos = String.valueOf(contadorLocalMinutos);
-                                }
-
-                                cronometroText.setText(minutos+":"+segundos);
-                            }
-                        });
-
-                    }
-
-                }
-            }
-
-
-        });
-        cronometro.start();
-
         TextView textView = findViewById(R.id.textViewContadorMinutos);
         registerForContextMenu(textView);
 
-        ImageButton start = findViewById(R.id.imageButtonPlayPause);
+        start = findViewById(R.id.imageButtonPlayPause);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*pausa++;
                 if(pausa % 2 == 0){
-                    pausar = true;
-                    ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
-                    imageButton.setImageResource(R.drawable.ic_action_play);
-                }else{*/
-                    /*ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
-                    imageButton.setImageResource(R.drawable.ic_action_pause);*/
+                    start.setImageResource(R.drawable.ic_action_play);
+                }else{
+                    start.setImageResource(R.drawable.ic_action_pause);
+                }
             }
-            //}
         });
 
         ImageButton refresh = findViewById(R.id.imageButtonRefresh);
-        start.setOnClickListener(new View.OnClickListener() {
+        refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                start.setImageResource(R.drawable.ic_action_play);
+            }
+        });
+
+
+
+        ViewModelProvider viewModelProvider = new ViewModelProvider(this);
+        final ControladorModelView contadorViewModel = viewModelProvider.get(ControladorModelView.class);
+        contadorViewModel.getContadorSegundos().observe(this, new Observer<Pair<Boolean, Integer>>() {
+            @Override
+            public void onChanged(Pair<Boolean, Integer> booleanIntegerPair) {
+
+                if (booleanIntegerPair.first){
+                    int valor = booleanIntegerPair.second;
+                    TextView segundos = findViewById(R.id.textViewSegundos);
+                   if(valor > 10){
+                       segundos.setText(String.valueOf(valor));
+                   }else{
+                       segundos.setText("0"+String.valueOf(valor));
+                   }
+                }else{
+                    descanso = true;
+                }
+
+            }
+        });
+
+        contadorViewModel.getContadorMinutos().observe(this, new Observer<Pair<Boolean, Integer>>() {
+            @Override
+            public void onChanged(Pair<Boolean, Integer> booleanIntegerPair) {
+
+                if (booleanIntegerPair.first){
+                    int valor = booleanIntegerPair.second;
+                    min = String.valueOf(valor);
+                    TextView min = findViewById(R.id.textViewContadorMinutos);
+                    if(valor > 10){
+                        min.setText(String.valueOf(valor)+" :");
+                    }else{
+                        min.setText("0"+String.valueOf(valor)+" :");
+                    }
+                }
+
             }
         });
 
     }
 
-    public void onClick(View view){
-
-        switch (view.getId()){
-            case R.id.imageButtonPlayPause:
-                corre = true;
-                break;
-            case R.id.imageButtonRefresh:
-                corre = false;
-                contadorLocalMinutos = 24;
-                contadorLocalSegundos = 59;
-                break;
+    public void iniciarContador(View view) {
+        pausa++;
+        ViewModelProvider viewModelProvider = new ViewModelProvider(this);
+        ControladorModelView contadorViewModel = viewModelProvider.get(ControladorModelView.class);
+        if(pausa % 2 == 0){
+            contadorViewModel.pauseContador();
+        }else{
+            contadorViewModel.iniciarContador();
         }
 
     }
+
+    public void refreshContador(View view) {
+        ViewModelProvider viewModelProvider = new ViewModelProvider(this);
+        ControladorModelView contadorViewModel = viewModelProvider.get(ControladorModelView.class);
+            contadorViewModel.refreshContador();
+        pausa = 0;
+    }
+
+
 
 
     @Override
