@@ -174,8 +174,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void abrirDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Tiempo de Descanso");
-        dialog.setMessage("¡Con esfuerzo y perseverancia podrás alcanzar tus metas!");
+        dialog.setTitle("Fin de Descanso");
+        dialog.setMessage("Debe concentrarse nuevamente");
         dialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
