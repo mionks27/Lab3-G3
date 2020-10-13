@@ -64,57 +64,47 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                while (contadorLocalMinutos > 0){
+                while (true){
                     if (pausar == false){
-                        while (contadorLocalSegundos >= 0){
-                            contadorLocalSegundos = contadorLocalSegundos -1;
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                                break;
-                            }
-                            if(contadorLocalSegundos == 0){
-                                contadorLocalSegundos = 59;
-                                break;
-                            }
-                        }
 
-                        contadorLocalMinutos = contadorLocalMinutos -1;
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
-                            break;
                         }
 
-                        if(contadorLocalMinutos == 0){
-                            contadorLocalMinutos = 24;
-                            break;
+                        contadorLocalSegundos= contadorLocalSegundos -1;
+
+                        if(contadorLocalSegundos == 0){
+                            contadorLocalMinutos = contadorLocalMinutos -1;
+                            contadorLocalSegundos = 59;
                         }
+
+                        if (contadorLocalMinutos == 0){
+                            contadorLocalMinutos = 24;
+                        }
+                        h.post(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                TextView textView = findViewById(R.id.textViewContadorMinutos);
+                                if(contadorLocalSegundos > 10){
+                                    textView.setText(contadorLocalMinutos+":"+contadorLocalSegundos);
+                                }else {
+                                    textView.setText(contadorLocalMinutos + ":0" + contadorLocalSegundos);
+                                }
+                            }
+                        });
+
                     }
 
                 }
-
-                h.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        TextView textView = findViewById(R.id.textViewContadorSegundos);
-                        if(contadorLocalSegundos > 10){
-                            textView.setText(contadorLocalSegundos);
-                        }else{
-                            textView.setText("0" + contadorLocalSegundos );
-                        }
-
-                        TextView textView2 = findViewById(R.id.textViewContadorMinutos);
-                        textView2.setText(contadorLocalMinutos +":");
-                    }
-                });
-
             }
 
 
         });
+
+        cronometro.start();
 
         TextView textView = findViewById(R.id.textViewContadorMinutos);
         registerForContextMenu(textView);
