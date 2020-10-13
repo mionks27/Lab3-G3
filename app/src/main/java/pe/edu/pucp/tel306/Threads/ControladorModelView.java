@@ -12,47 +12,54 @@ public class ControladorModelView extends ViewModel {
     private Thread thread = null;
 
 
-    public void iniciarciclo (){
+    public void iniciarciclo (final boolean pause){
         setThread(new Thread(new Runnable() {
             @Override
             public void run() {
                 int contadorLocalMinutos = 24;
                 int contadorLocalSegundos = 59;
                 while (contadorLocalMinutos > 0){
-                    contadorMinutos.postValue(contadorLocalMinutos);
-                    while (contadorLocalSegundos >= 0){
-                                contadorSegundos.postValue(contadorLocalSegundos);
-                                contadorLocalSegundos = contadorLocalSegundos -1;
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                    break;
-                                }
-                                if(contadorLocalSegundos == 0){
-                                    contadorLocalSegundos = 59;
-                                    break;
-                                }
-                            }
+                   if (pause == false){
+                       contadorMinutos.postValue(contadorLocalMinutos);
+                       while (contadorLocalSegundos >= 0){
+                           contadorSegundos.postValue(contadorLocalSegundos);
+                           contadorLocalSegundos = contadorLocalSegundos -1;
+                           try {
+                               Thread.sleep(1000);
+                           } catch (InterruptedException e) {
+                               e.printStackTrace();
+                               break;
+                           }
+                           if(contadorLocalSegundos == 0){
+                               contadorLocalSegundos = 59;
+                               break;
+                           }
+                       }
 
-                    contadorLocalMinutos = contadorLocalMinutos -1;
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        break;
-                    }
+                       contadorLocalMinutos = contadorLocalMinutos -1;
+                       try {
+                           Thread.sleep(1000);
+                       } catch (InterruptedException e) {
+                           e.printStackTrace();
+                           break;
+                       }
 
-                    if(contadorLocalMinutos == 0){
-                        contadorLocalMinutos = 24;
-                        break;
-                    }
+                       if(contadorLocalMinutos == 0){
+                           contadorLocalMinutos = 24;
+                           break;
+                       }
+                   }
+
                 }
 
             }
         }));
 
         getThread().start();
+    }
+
+    public  void iniciarDescanso(){
+
     }
 
     public MutableLiveData<Integer> getContadorSegundos() {

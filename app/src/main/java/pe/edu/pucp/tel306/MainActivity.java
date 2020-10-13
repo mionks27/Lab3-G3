@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import pe.edu.pucp.tel306.Threads.ControladorModelView;
@@ -15,40 +17,96 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    boolean pausar = false;
+    Thread cronometro;
+    int contadorLocalMinutos = 24;
+    int contadorLocalSegundos = 59;
+    Handler h = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Página Principal");
-        ViewModelProvider viewModelProvider = new ViewModelProvider(this);
-        ControladorModelView controladorModelView = viewModelProvider.get(ControladorModelView.class);
-        controladorModelView.getContadorMinutos().observe(this, new Observer<Integer>() {
+
+        cronometro = new Thread(new Runnable() {
             @Override
-            public void onChanged(Integer integer) {
-                TextView textView = findViewById(R.id.textViewContadorMinutos);
-                if(integer > 10){
-                    textView.setText(String.valueOf(integer));
-                }else{
-                    textView.setText("0"+String.valueOf(integer));
+            public void run() {
+
+                while (contadorLocalMinutos > 0){
+                    if (pausar == false){
+                        while (contadorLocalSegundos >= 0){
+                            contadorLocalSegundos = contadorLocalSegundos -1;
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                                break;
+                            }
+                            if(contadorLocalSegundos == 0){
+                                contadorLocalSegundos = 59;
+                                break;
+                            }
+                        }
+
+                        contadorLocalMinutos = contadorLocalMinutos -1;
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            break;
+                        }
+
+                        if(contadorLocalMinutos == 0){
+                            contadorLocalMinutos = 24;
+                            break;
+                        }
+                    }
+
                 }
 
+                h.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        TextView textView = findViewById(R.id.textViewContadorSegundos);
+                        if(contadorLocalSegundos > 10){
+                            textView.setText(contadorLocalSegundos);
+                        }else{
+                            textView.setText("0" + contadorLocalSegundos );
+                        }
+
+                        TextView textView2 = findViewById(R.id.textViewContadorMinutos);
+                        textView2.setText(contadorLocalMinutos +":");
+                    }
+                });
+
             }
+
+
         });
 
-        controladorModelView.getContadorSegundos().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                TextView textView = findViewById(R.id.textViewContadorSegundos);
-                textView.setText(String.valueOf(integer) + ":");
-            }
-        });
     }
 
-    public void iniciarContador (View view){
-        ViewModelProvider viewModelProvider = new ViewModelProvider(this);
-        ControladorModelView controladorModelView = viewModelProvider.get(ControladorModelView.class);
-        controladorModelView.iniciarciclo();
-
+    public void onClick (View view){
+        int pausa = 0;
+        switch (view.getId()){
+            case R.id.imageButtonPlayPause:
+                pausa++;
+                if(pausa % 2 == 0){
+                    pausar = true;
+                    ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
+                    imageButton.setImageResource(R.drawable.ic_action_play);
+                }else{
+                    pausar = false;
+                    ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
+                    imageButton.setImageResource(R.drawable.ic_action_pause);
+                }
+                break;
+            case R.id.imageButtonRefresh:
+                pausar= true;
+                 contadorLocalMinutos = 24;
+                 contadorLocalSegundos = 59;
+                break;
+        }
     }
 
 
