@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -116,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if(valor == 0){
                         descanso1 = true;
+                        abrirDialog();
                     }
 
                 }
@@ -162,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
         ViewModelProvider viewModelProvider = new ViewModelProvider(this);
         ControladorModelView contadorViewModel = viewModelProvider.get(ControladorModelView.class);
         if(pausa % 2 == 0){
+
             contadorViewModel.pauseContador();
         }else{
             contadorViewModel.iniciarContador();
@@ -209,5 +212,18 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    public void abrirDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Fin de Descanso");
+        dialog.setMessage("Debe concentrarse nuevamente");
+        dialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.show();
     }
 }
