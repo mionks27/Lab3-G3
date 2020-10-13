@@ -22,50 +22,28 @@ import org.w3c.dom.Text;
 public class MainActivity extends AppCompatActivity {
 
     int pausa =0;
-    boolean pausar = true;
+    boolean corre = false;
     Thread cronometro;
     int contadorLocalMinutos = 24;
     int contadorLocalSegundos = 59;
+    TextView cronometroText;
     Handler h = new Handler();
+    ImageButton startPause , refresh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Página Principal");
-
-        ImageButton start = findViewById(R.id.imageButtonPlayPause);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*pausa++;
-                if(pausa % 2 == 0){
-                    pausar = true;
-                    ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
-                    imageButton.setImageResource(R.drawable.ic_action_play);
-                }else{*/
-                    pausar = false;
-                    /*ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
-                    imageButton.setImageResource(R.drawable.ic_action_pause);*/
-                }
-            //}
-        });
-
-        ImageButton refresh = findViewById(R.id.imageButtonRefresh);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pausar= true;
-                contadorLocalMinutos = 24;
-                contadorLocalSegundos = 59;
-            }
-        });
+        //setTitle("Página Principal");
+        startPause = findViewById(R.id.imageButtonPlayPause);
+        refresh = findViewById(R.id.imageButtonRefresh);
+        cronometroText = findViewById(R.id.textViewContadorMinutos);
 
         cronometro = new Thread(new Runnable() {
             @Override
             public void run() {
 
                 while (true){
-                    if (pausar == false){
+                    if (corre == true){
 
                         try {
                             Thread.sleep(1000);
@@ -88,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                             public void run() {
                                     String segundos = "";
                                     String minutos = "";
-                                TextView textView = findViewById(R.id.textViewContadorMinutos);
+
                                 if(contadorLocalSegundos >= 10){
                                     segundos = String.valueOf(contadorLocalSegundos);
                                 }else{
@@ -100,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                                     minutos = String.valueOf(contadorLocalMinutos);
                                 }
 
-                                textView.setText(minutos+":"+segundos);
+                                cronometroText.setText(minutos+":"+segundos);
                             }
                         });
 
@@ -115,6 +93,21 @@ public class MainActivity extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.textViewContadorMinutos);
         registerForContextMenu(textView);
+
+    }
+
+    public void onClick(View view){
+
+        switch (view.getId()){
+            case R.id.imageButtonPlayPause:
+                corre = true;
+                break;
+            case R.id.imageButtonRefresh:
+                corre = false;
+                contadorLocalMinutos = 24;
+                contadorLocalSegundos = 59;
+                break;
+        }
 
     }
 
