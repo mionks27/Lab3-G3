@@ -26,7 +26,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(Integer integer) {
                 TextView textView = findViewById(R.id.textViewContadorMinutos);
-                textView.setText(String.valueOf(integer));
+                if(integer > 10){
+                    textView.setText(String.valueOf(integer));
+                }else{
+                    textView.setText("0"+String.valueOf(integer));
+                }
+
             }
         });
 
@@ -34,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(Integer integer) {
                 TextView textView = findViewById(R.id.textViewContadorSegundos);
-                textView.setText(String.valueOf(integer));
+                textView.setText(String.valueOf(integer) + ":");
             }
         });
     }
@@ -46,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-<<<<<<< HEAD
-=======
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -58,5 +62,4 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, HelpActivity.class);
         startActivity(intent);
     }
->>>>>>> d823c517712c67a6b1e3a73ab8ec794703a8351d
 }
