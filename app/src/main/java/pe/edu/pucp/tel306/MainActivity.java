@@ -86,13 +86,21 @@ public class MainActivity extends AppCompatActivity {
                         h.post(new Runnable() {
                             @Override
                             public void run() {
-
+                                    String segundos = "";
+                                    String minutos = "";
                                 TextView textView = findViewById(R.id.textViewContadorMinutos);
-                                if(contadorLocalSegundos > 10){
-                                    textView.setText(contadorLocalMinutos+":"+contadorLocalSegundos);
-                                }else {
-                                    textView.setText(contadorLocalMinutos + ":0" + contadorLocalSegundos);
+                                if(contadorLocalSegundos >= 10){
+                                    segundos = String.valueOf(contadorLocalSegundos);
+                                }else{
+                                    segundos = "0"+String.valueOf(contadorLocalSegundos);
                                 }
+                                if(contadorLocalMinutos>= 10){
+                                    minutos = String.valueOf(contadorLocalMinutos);
+                                }else {
+                                    minutos = String.valueOf(contadorLocalMinutos);
+                                }
+
+                                textView.setText(minutos+":"+segundos);
                             }
                         });
 
