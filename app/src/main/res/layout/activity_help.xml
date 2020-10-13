@@ -70,9 +70,17 @@
                 android:id="@+id/textViewText3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="15dp"
                 android:text='Decida la tarea a realizar, establezca los temporizadores en 25 minutos para un "Pomodoro". Trabaja en la tarea hasta que se complete el temporizador. Después de completar el temporizador, coloque una marca de verificación en la lista de tareas pendientes. Tómate un breve descanso de 5 minutos. Después de cuatro "Pomodoro", tómate un descanso. Repita el paso 1.'
                 android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textViewMasInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="TextView"
+                android:textSize="16sp" />
 
         </LinearLayout>
     </ScrollView>
