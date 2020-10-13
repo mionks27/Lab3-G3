@@ -33,32 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle("Página Principal");
 
-        ImageButton start = findViewById(R.id.imageButtonPlayPause);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*pausa++;
-                if(pausa % 2 == 0){
-                    pausar = true;
-                    ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
-                    imageButton.setImageResource(R.drawable.ic_action_play);
-                }else{*/
-                    pausar = false;
-                    /*ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
-                    imageButton.setImageResource(R.drawable.ic_action_pause);*/
-                }
-            //}
-        });
 
-        ImageButton refresh = findViewById(R.id.imageButtonRefresh);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pausar= true;
-                contadorLocalMinutos = 24;
-                contadorLocalSegundos = 59;
-            }
-        });
 
         cronometro = new Thread(new Runnable() {
             @Override
@@ -115,6 +90,33 @@ public class MainActivity extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.textViewContadorMinutos);
         registerForContextMenu(textView);
+
+        ImageButton start = findViewById(R.id.imageButtonPlayPause);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*pausa++;
+                if(pausa % 2 == 0){
+                    pausar = true;
+                    ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
+                    imageButton.setImageResource(R.drawable.ic_action_play);
+                }else{*/
+                pausar = false;
+                    /*ImageButton imageButton = findViewById(R.id.imageButtonPlayPause);
+                    imageButton.setImageResource(R.drawable.ic_action_pause);*/
+            }
+            //}
+        });
+
+        ImageButton refresh = findViewById(R.id.imageButtonRefresh);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pausar= true;
+                contadorLocalMinutos = 24;
+                contadorLocalSegundos = 59;
+            }
+        });
 
     }
 
